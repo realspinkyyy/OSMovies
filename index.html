@@ -27,6 +27,18 @@
       overflow: hidden;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    .debug-console {
+      width: 100%;
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      border-radius: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
     h1 {
       font-size: 2rem;
       text-align: center;
@@ -94,6 +106,10 @@
 </head>
 <body>
   <div class="container">
+    <div class="debug-console" id="debugConsole">
+      Debug Console:
+      <br>Loading...
+    </div>
     <h1>Urgent Messages</h1>
     <div class="input-container">
       <input type="text" id="messageInput" placeholder="Type your urgent message..." />
@@ -129,6 +145,13 @@
     // Real-time message sync from Firestore
     const messagesRef = db.collection("messages");
 
+    // Debugging function to log into console
+    const logToConsole = (message) => {
+      const debugConsole = document.getElementById("debugConsole");
+      debugConsole.innerHTML += message + "<br>";
+      debugConsole.scrollTop = debugConsole.scrollHeight;  // Scroll to the bottom
+    };
+
     const renderMessage = (message) => {
       const messageDiv = document.createElement("div");
       messageDiv.className = "message";
@@ -144,6 +167,7 @@
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
             renderMessage(change.doc.data());
+            logToConsole("New message added: " + change.doc.data().message);
             // Scroll to the latest message
             const messagesContainer = document.getElementById("messages");
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -156,9 +180,12 @@
     const sendMessage = () => {
       const messageInput = document.getElementById("messageInput");
       const message = messageInput.value.trim();
-      console.log("Sending message: ", message);  // Debug log to check the message
+      logToConsole("Attempting to send message: " + message);
 
-      if (message === "") return;  // Don't send empty messages
+      if (message === "") {
+        logToConsole("Message is empty. Not sending.");
+        return;  // Don't send empty messages
+      }
 
       // Add message to Firestore
       messagesRef.add({
@@ -166,10 +193,10 @@
         message: message,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
-        console.log("Message sent successfully!"); // Debug log
+        logToConsole("Message sent successfully!");
         messageInput.value = ""; // Clear input
       }).catch((error) => {
-        console.error("Error sending message:", error);
+        logToConsole("Error sending message: " + error.message);
       });
     };
 
@@ -182,15 +209,14 @@
         const token = await messaging.getToken({
           vapidKey: "YOUR_VAPID_KEY" // Replace with your own VAPID key
         });
-        console.log("FCM Token:", token);
-        // You can store this token in Firestore to target specific users
+        logToConsole("FCM Token obtained: " + token);
       } catch (error) {
-        console.error("Error getting FCM token:", error);
+        logToConsole("Error getting FCM token: " + error);
       }
     };
 
     messaging.onMessage((payload) => {
-      console.log("Message received:", payload);
+      logToConsole("Message received in foreground: " + payload.notification.body);
       // Show the notification when app is in the foreground
       new Notification("New Message", {
         body: payload.notification.body,
