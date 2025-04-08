@@ -66,7 +66,7 @@
       margin-top: 10px;
       font-size: 0.9em;
     }
-    .likes, .replies {
+    .likes {
       cursor: pointer;
       color: #1da1f2;
     }
@@ -105,15 +105,16 @@
 <button class="dark-mode">Dark Mode</button>
 
 <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
+  // Firebase initialization
   const firebaseConfig = {
     apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
     authDomain: "spinktweet.firebaseapp.com",
     projectId: "spinktweet",
-    storageBucket: "spinktweet.firebasestorage.app",
+    storageBucket: "spinktweet.firebaseapp.com",
     messagingSenderId: "848866063079",
     appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
     measurementId: "G-81YMX6VBK4"
@@ -156,15 +157,9 @@
         username,  // Use the saved username
         profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
         time: Date.now(),
-        likes: 0,
-        replies: 0
-      })
-      .then(() => {
-        tweetInput.value = "";
-      })
-      .catch((error) => {
-        console.error("Error adding tweet: ", error);
+        likes: 0
       });
+      tweetInput.value = "";
     }
   };
 
@@ -183,7 +178,6 @@
           <div class="time">${new Date(tweet.time).toLocaleString()}</div>
           <div class="tweet-footer">
             <div class="likes" onclick="likeTweet('${doc.id}')">Likes: ${tweet.likes}</div>
-            <div class="replies" onclick="replyToTweet('${doc.id}')">Replies: ${tweet.replies}</div>
           </div>
         </div>
       `;
@@ -196,20 +190,6 @@
     const tweetRef = db.collection("tweets").doc(id);
     tweetRef.update({
       likes: firebase.firestore.FieldValue.increment(1)
-    })
-    .catch((error) => {
-      console.error("Error liking tweet: ", error);
-    });
-  }
-
-  // Reply to Tweet (basic increment for demo)
-  function replyToTweet(id) {
-    const tweetRef = db.collection("tweets").doc(id);
-    tweetRef.update({
-      replies: firebase.firestore.FieldValue.increment(1)
-    })
-    .catch((error) => {
-      console.error("Error replying to tweet: ", error);
     });
   }
 </script>
