@@ -66,7 +66,7 @@
       margin-top: 10px;
       font-size: 0.9em;
     }
-    .likes {
+    .likes, .replies {
       cursor: pointer;
       color: #1da1f2;
     }
@@ -129,11 +129,13 @@
   const body = document.body;
 
   let isDarkMode = false;
+
+  // Check if username is saved in localStorage
   let username = localStorage.getItem('username');
 
   // Ask for the user's name if not already saved
   if (!username) {
-    username = prompt("What is your name?");
+    username = prompt('Please enter your name:');
     localStorage.setItem('username', username);
   }
 
