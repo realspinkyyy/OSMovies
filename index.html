@@ -1,567 +1,110 @@
-<html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ReelZone offers free and fast streaming of the latest movies and trending TV shows. Watch high-quality content online anytime, anywhere.">
-    <meta name="keywords" content="free movies, free movie streaming, free TV shows, fast streaming, online movies, watch movies for free, trending movies, latest TV shows, stream movies for free, high-quality free streaming">
-    <meta name="author" content="ReelZone">
-    <meta property="og:title" content="ReelZone - Free and Fast Movie and TV Show Streaming">
-    <meta property="og:description" content="Stream the latest movies and trending TV shows for free on ReelZone. Enjoy fast and high-quality content anytime, anywhere.">
-    <meta property="og:url" content="https://reelzone.vercel.app/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="ReelZone">
-    <title>ReelZone - Free and Fast Streaming of Movies and TV Shows</title>
-    <link rel="stylesheet" href="styles.css">
-    <iframe src="javascript:false" width="0" height="0" style="display: none;"></iframe><script type="text/javascript" async="" src="https://www.cdn4ads.com/dYSwJ/I/vhr.min.js" crossorigin="anonymous"></script><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-Z93W33F4WC"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-Z93W33F4WC');
-    </script>
-    <script disable-devtool-auto="" src="https://cdn.jsdelivr.net/npm/disable-devtool"></script>
-    <script type="text/javascript" data-cfasync="false">
-        /*<![CDATA[/* */
-        (function(){var i=window,k="a7548add7cd88ccd65af579914ec4666",z=[["siteId",395*595*913-209421499],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],c=["d3d3LmNkbjRhZHMuY29tL2RZU3dKL0kvdmhyLm1pbi5qcw==","ZDNnNW92Zm5nanc5YncuY2xvdWRmcm9udC5uZXQvbGFqdi5taW4uanM=","d3d3LndneHJnZmRiLmNvbS95TXZ2Vi9STk5lcm8vY2hyLm1pbi5qcw==","d3d3Lm9yZ2hmaGF6LmNvbS9rYWp2Lm1pbi5qcw=="],u=-1,e,s,n=function(){clearTimeout(s);u++;if(c[u]&&!(1760119183000<(new Date).getTime()&&1<u)){e=i.document.createElement("script");e.type="text/javascript";e.async=!0;var b=i.document.getElementsByTagName("script")[0];e.src="https://"+atob(c[u]);e.crossOrigin="anonymous";e.onerror=n;e.onload=function(){clearTimeout(s);i[k.slice(0,16)+k.slice(0,16)]||n()};s=setTimeout(n,5E3);b.parentNode.insertBefore(e,b)}};if(!i[k]){try{Object.freeze(i[k]=z)}catch(e){}n()}})();
-        /*]]>/* */
-    </script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SpinkTweet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f0f2f5;
+    }
+    header {
+      background: #1da1f2;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5em;
+    }
+    #tweetInput {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border: none;
+      outline: none;
+    }
+    #sendBtn {
+      width: 100%;
+      padding: 1rem;
+      background: #1da1f2;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #feed {
+      padding: 1rem;
+    }
+    .tweet {
+      background: white;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .time {
+      color: gray;
+      font-size: 0.8em;
+    }
+  </style>
 </head>
 <body>
-    <a href="https://discord.gg/zArgTukX3Z" target="_blank" class="discord-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512">
-            <path fill="#5865F2" d="M256 0c141.385 0 256 114.615 256 256S397.385 512 256 512 0 397.385 0 256 114.615 0 256 0z"></path>
-            <g data-name="å¾å± 2">
-                <g data-name="Discord Logos">
-                    <path fill="#fff" fill-rule="nonzero" d="M360.932 160.621a250.49 250.49 0 00-62.384-19.182 174.005 174.005 0 00-7.966 16.243 232.677 232.677 0 00-34.618-2.602c-11.569 0-23.196.879-34.623 2.58-2.334-5.509-5.044-10.972-7.986-16.223a252.55 252.55 0 00-62.397 19.222c-39.483 58.408-50.183 115.357-44.833 171.497a251.546 251.546 0 0076.502 38.398c6.169-8.328 11.695-17.193 16.386-26.418a161.718 161.718 0 01-25.813-12.318c2.165-1.569 4.281-3.186 6.325-4.756 23.912 11.23 50.039 17.088 76.473 17.088 26.436 0 52.563-5.858 76.475-17.09 2.069 1.689 4.186 3.306 6.325 4.756a162.642 162.642 0 01-25.859 12.352 183.919 183.919 0 0016.386 26.396 250.495 250.495 0 0076.553-38.391l-.006.006c6.278-65.103-10.724-121.529-44.94-171.558zM205.779 297.63c-14.908 0-27.226-13.53-27.226-30.174 0-16.645 11.889-30.294 27.179-30.294 15.289 0 27.511 13.649 27.249 30.294-.261 16.644-12.007 30.174-27.202 30.174zm100.439 0c-14.933 0-27.202-13.53-27.202-30.174 0-16.645 11.889-30.294 27.202-30.294 15.313 0 27.44 13.649 27.178 30.294-.261 16.644-11.984 30.174-27.178 30.174z"></path>
-                </g>
-            </g>
-        </svg>
-    </a>
-    <!-- Navigation Header -->
-    <header>
-        <a href="index.html" class="logo">REELZONE</a>
-        <nav>
-            <input type="text" id="search-bar" placeholder="Search for movies or TV shows...">
-        </nav>
-    </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero" id="hero" style="background-image: url(&quot;https://image.tmdb.org/t/p/original/2meX1nMdScFOoV4370rqHWKmXhY.jpg&quot;); border-radius: 20px;">
-            <div class="hero-content">
-                <img src="https://image.tmdb.org/t/p/w500/6YFWTX7fiGjWpsnJWLLV4RSbJWd.png" alt="Squid Game" class="hero-logo">
-                <p class="hero-description">Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside, a tempting prize awaits — with deadly high stakes.</p>
-                <button onclick="redirectToDetails(93405, 'tv')" class="view-details-btn">PLAY</button>
-            </div>
-        </section>
+<header>SpinkTweet</header>
+<textarea id="tweetInput" rows="3" placeholder="What's happening?"></textarea>
+<button id="sendBtn">Tweet</button>
+<div id="feed"></div>
 
-        <!-- Trending Movies Section -->
-        <section id="trending-movies-section">
-            <h2 class="trending-movies-title">Trending Movies</h2>
-            <div class="horizontal-scroll-wrapper">
-                <button class="scroll-left" onclick="scrollHorizontal('left', 'trending-movies')">←</button>
-                <div class="horizontal-scroll" id="trending-movies">
-        <div class="movie-card" onclick="redirectToDetails(696506, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/edKpE9B5qN3e559OuMCLZdW1iBZ.jpg" alt="Mickey 17">
-            <h3>Mickey 17</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(950387, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg" alt="A Minecraft Movie">
-            <h3>A Minecraft Movie</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1233575, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/hHPovtU4b96LHcoeEwRkGHI5btw.jpg" alt="Black Bag">
-            <h3>Black Bag</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1197306, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg" alt="A Working Man">
-            <h3>A Working Man</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1124620, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/yYa8Onk9ow7ukcnfp2QWVvjWYel.jpg" alt="The Monkey">
-            <h3>The Monkey</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(762509, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/lurEK87kukWNaHd0zYnsi3yzJrs.jpg" alt="Mufasa: The Lion King">
-            <h3>Mufasa: The Lion King</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(447273, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/xWWg47tTfparvjK0WJNX4xL8lW2.jpg" alt="Snow White">
-            <h3>Snow White</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1226141, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/x4UT6SsBEnVzyeYm86WItNl4wGG.jpg" alt="The Last Dance">
-            <h3>The Last Dance</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1265623, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/2QAgOQWcdQLnbki5V2Sjn1tcnHS.jpg" alt="Banger">
-            <h3>Banger</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1254786, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/5fg98cVo7da7OIK45csdLSd4NaU.jpg" alt="The Life List">
-            <h3>The Life List</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1138194, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/fr96XzlzsONrQrGfdLMiwtQjott.jpg" alt="Heretic">
-            <h3>Heretic</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(257094, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/39jIr3A4ScUeGxFdMeARYKNxTgU.jpg" alt="Holland">
-            <h3>Holland</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(238, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" alt="The Godfather">
-            <h3>The Godfather</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(549509, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/vP7Yd6couiAaw9jgMd5cjMRj3hQ.jpg" alt="The Brutalist">
-            <h3>The Brutalist</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1202479, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/m0du9dsiOVeb0SgfqR8ZAEPRxww.jpg" alt="Opus">
-            <h3>Opus</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1084199, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/oCoTgC3UyWGfyQ9thE10ulWR7bn.jpg" alt="Companion">
-            <h3>Companion</h3>
-        </div>
-    </div>
-                <button class="scroll-right" onclick="scrollHorizontal('right', 'trending-movies')">→</button>
-            </div>
-        </section>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-        <!-- Trending TV Shows Section -->
-        <section id="trending-tvshows-section">
-            <h2 class="trending-movies-title">Trending TV Shows</h2>
-            <div class="horizontal-scroll-wrapper">
-                <button class="scroll-left" onclick="scrollHorizontal('left', 'trending-tvshows')">←</button>
-                <div class="horizontal-scroll" id="trending-tvshows">
-        <div class="movie-card" onclick="redirectToDetails(235930, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/d9aqYyDymdl0HhexUQMT6dKUM4r.jpg" alt="Devil May Cry">
-            <h3>Devil May Cry</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(111803, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/gbSaK9v1CbcYH1ISgbM7XObD2dW.jpg" alt="The White Lotus">
-            <h3>The White Lotus</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(157744, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/97YimtKZCD0bvHIG4YPgWo3OYar.jpg" alt="1923">
-            <h3>1923</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(229711, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/gwd2HpY2ymvmASUP3zMYF59IIr7.jpg" alt="The Bondsman">
-            <h3>The Bondsman</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(127532, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/geCRueV3ElhRTr0xtJuEWJt6dJ1.jpg" alt="Solo Leveling">
-            <h3>Solo Leveling</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(241405, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/xaKb3cTh8mT6fgLSXuqo4JoS0dU.jpg" alt="Dying for Sex">
-            <h3>Dying for Sex</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(247718, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/abeH7n5pcuQcwYcTxG6DTZvXLP1.jpg" alt="MobLand">
-            <h3>MobLand</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(249042, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/tDHWWReefmOOjBCJZUck8cNwssk.jpg" alt="Adolescence">
-            <h3>Adolescence</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(37854, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/cMD9Ygz11zjJzAovURpO75Qg7rT.jpg" alt="One Piece">
-            <h3>One Piece</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(219246, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/Afrz3QAcQcsT6w4S5wrKUxmYPWM.jpg" alt="When Life Gives You Tangerines">
-            <h3>When Life Gives You Tangerines</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(233686, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/2G99FfWYCAdsmAIZO8zGFjcDidY.jpg" alt="Karma">
-            <h3>Karma</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(100088, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg" alt="The Last of Us">
-            <h3>The Last of Us</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(95396, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg" alt="Severance">
-            <h3>Severance</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(274671, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/az0jQSgRLezKw5uHaEjPH20NexD.jpg" alt="The Beginning After the End">
-            <h3>The Beginning After the End</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(71914, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/eVm7vI0VTUKYzgpOXCUu9qz3L4E.jpg" alt="The Wheel of Time">
-            <h3>The Wheel of Time</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(108978, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/31GlRQMiDunO8cl3NxTz34U64rf.jpg" alt="Reacher">
-            <h3>Reacher</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(223500, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/3kTFL3PAeTyS8gGZAh0iYG6NNjt.jpg" alt="WIND BREAKER">
-            <h3>WIND BREAKER</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(272059, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/lIfjl7Jk6tFq35hbU9TZt5btro.jpg" alt="TO BE HERO X">
-            <h3>TO BE HERO X</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(258764, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/6HAbRWYkX3bouEeHA4bjsUxznKC.jpg" alt="The Divorce Insurance">
-            <h3>The Divorce Insurance</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(220542, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/e3ojpANrFnmJCyeBNTinYwyBCIN.jpg" alt="The Apothecary Diaries">
-            <h3>The Apothecary Diaries</h3>
-        </div>
-    </div>
-                <button class="scroll-right" onclick="scrollHorizontal('right', 'trending-tvshows')">→</button>
-            </div>
-        </section>
+<script>
+  // Your Firebase config (from what you gave)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
+    authDomain: "spinktweet.firebaseapp.com",
+    projectId: "spinktweet",
+    storageBucket: "spinktweet.firebasestorage.app",
+    messagingSenderId: "848866063079",
+    appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
+    measurementId: "G-81YMX6VBK4"
+  };
 
-        <!-- Top-rated Movies and TV Shows Section -->
-        <section id="top-rated-section">
-            <h2 class="trending-movies-title">Top Rated</h2>
-            <div id="top-rated-buttons">
-                <button id="top-rated-movies-btn" onclick="toggleTopRatedContent('movies')">Movies</button>
-                <button id="top-rated-tvshows-btn" onclick="toggleTopRatedContent('tv')">TV Shows</button>
-            </div>
-            <div id="top-rated-content">
-                <div id="top-rated-movies" class="horizontal-scroll-wrapper" style="display: block;">
-                    <button class="scroll-left" onclick="scrollHorizontal('left', 'top-rated-movies-list')">←</button>
-                    <div class="horizontal-scroll" id="top-rated-movies-list">
-        <div class="movie-card" onclick="redirectToDetails(278, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg" alt="The Shawshank Redemption">
-            <h3>The Shawshank Redemption</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(238, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" alt="The Godfather">
-            <h3>The Godfather</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(240, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg" alt="The Godfather Part II">
-            <h3>The Godfather Part II</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(424, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg" alt="Schindler's List">
-            <h3>Schindler's List</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(389, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/ow3wq89wM8qd5X7hWKxiRfsFf9C.jpg" alt="12 Angry Men">
-            <h3>12 Angry Men</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(129, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg" alt="Spirited Away">
-            <h3>Spirited Away</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(19404, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/lfRkUr7DYdHldAqi3PwdQGBRBPM.jpg" alt="Dilwale Dulhania Le Jayenge">
-            <h3>Dilwale Dulhania Le Jayenge</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(155, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" alt="The Dark Knight">
-            <h3>The Dark Knight</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(497, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/8VG8fDNiy50H4FedGwdSVUPoaJe.jpg" alt="The Green Mile">
-            <h3>The Green Mile</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(496243, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" alt="Parasite">
-            <h3>Parasite</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(680, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg" alt="Pulp Fiction">
-            <h3>Pulp Fiction</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(372058, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/8GJsy7w7frGquw1cy9jasOGNNI1.jpg" alt="Your Name.">
-            <h3>Your Name.</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(122, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" alt="The Lord of the Rings: The Return of the King">
-            <h3>The Lord of the Rings: The Return of the King</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(13, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg" alt="Forrest Gump">
-            <h3>Forrest Gump</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(429, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/bX2xnavhMYjWDoZp1VM6VnU1xwe.jpg" alt="The Good, the Bad and the Ugly">
-            <h3>The Good, the Bad and the Ugly</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(769, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg" alt="GoodFellas">
-            <h3>GoodFellas</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(346, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/8OKmBV5BUFzmozIC3pPWKHy17kx.jpg" alt="Seven Samurai">
-            <h3>Seven Samurai</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(157336, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interstellar">
-            <h3>Interstellar</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(12477, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/k9tv1rXZbOhH7eiCk378x61kNQ1.jpg" alt="Grave of the Fireflies">
-            <h3>Grave of the Fireflies</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(637, 'movie')">
-            <img src="https://image.tmdb.org/t/p/w500/74hLDKjD5aGYOotO6esUVaeISa2.jpg" alt="Life Is Beautiful">
-            <h3>Life Is Beautiful</h3>
-        </div>
-    </div>
-                    <button class="scroll-right" onclick="scrollHorizontal('right', 'top-rated-movies-list')">→</button>
-                </div>
-                <div id="top-rated-tvshows" class="horizontal-scroll-wrapper" style="display: none;">
-                    <button class="scroll-left" onclick="scrollHorizontal('left', 'top-rated-tvshows-list')">←</button>
-                    <div class="horizontal-scroll" id="top-rated-tvshows-list">
-        <div class="movie-card" onclick="redirectToDetails(1396, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/ineLOBPG8AZsluYwnkMpHRyu7L.jpg" alt="Breaking Bad">
-            <h3>Breaking Bad</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(131378, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/fi1b6U1kp73xheECzqwzMn8u3mX.jpg" alt="Adventure Time: Fionna &amp; Cake">
-            <h3>Adventure Time: Fionna &amp; Cake</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(94605, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg" alt="Arcane">
-            <h3>Arcane</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(220542, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/e3ojpANrFnmJCyeBNTinYwyBCIN.jpg" alt="The Apothecary Diaries">
-            <h3>The Apothecary Diaries</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(209867, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/dqZENchTd7lp5zht7BdlqM7RBhD.jpg" alt="Frieren: Beyond Journey's End">
-            <h3>Frieren: Beyond Journey's End</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(94954, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/rXojaQcxVUubPLSrFV8PD4xdjrs.jpg" alt="Hazbin Hotel">
-            <h3>Hazbin Hotel</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(246, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/v2vn1coUMPKw0GI1KGC5J4IXtqp.jpg" alt="Avatar: The Last Airbender">
-            <h3>Avatar: The Last Airbender</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(240411, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/6qfZAOEUFIrbUH3JvePclx1nXzz.jpg" alt="Dan Da Dan">
-            <h3>Dan Da Dan</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(37854, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/cMD9Ygz11zjJzAovURpO75Qg7rT.jpg" alt="One Piece">
-            <h3>One Piece</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(31911, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg" alt="Fullmetal Alchemist: Brotherhood">
-            <h3>Fullmetal Alchemist: Brotherhood</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(60059, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/zjg4jpK1Wp2kiRvtt5ND0kznako.jpg" alt="Better Call Saul">
-            <h3>Better Call Saul</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(60625, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/gdIrmf2DdY5mgN6ycVP0XlzKzbE.jpg" alt="Rick and Morty">
-            <h3>Rick and Morty</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(87108, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg" alt="Chernobyl">
-            <h3>Chernobyl</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1429, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg" alt="Attack on Titan">
-            <h3>Attack on Titan</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(92685, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/zqjSex7DZn7p4dU7mMktdJ8zQV5.jpg" alt="The Owl House">
-            <h3>The Owl House</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(70785, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/6P6tXhjT5tK3qOXzxF9OMLlG7iz.jpg" alt="Anne with an E">
-            <h3>Anne with an E</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(1398, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg" alt="The Sopranos">
-            <h3>The Sopranos</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(42705, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/i3U3J2MWovIBZBnZYYiOLBXqNJZ.jpg" alt="Fighting Spirit">
-            <h3>Fighting Spirit</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(85937, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg" alt="Demon Slayer: Kimetsu no Yaiba">
-            <h3>Demon Slayer: Kimetsu no Yaiba</h3>
-        </div>
-    
-        <div class="movie-card" onclick="redirectToDetails(259666, 'tv')">
-            <img src="https://image.tmdb.org/t/p/w500/py0s87C9214KRbZ4kWLQfgsE9ET.jpg" alt="No One Will Miss Us">
-            <h3>No One Will Miss Us</h3>
-        </div>
-    </div>
-                    <button class="scroll-right" onclick="scrollHorizontal('right', 'top-rated-tvshows-list')">→</button>
-                </div>
-            </div>
-        </section>
+  // Init Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-        <!-- Discover by Genres Section -->
-        <section id="discover-by-genres-section">
-            <h2 class="trending-movies-title">Discover by Genres</h2>
-            <select id="genre-select" onchange="fetchMoviesByGenre()">
-                <!-- Genre options will be injected here -->
-            <option value="28">Action</option><option value="12">Adventure</option><option value="16">Animation</option><option value="35">Comedy</option><option value="80">Crime</option><option value="99">Documentary</option><option value="18">Drama</option><option value="10751">Family</option><option value="14">Fantasy</option><option value="36">History</option><option value="27">Horror</option><option value="10402">Music</option><option value="9648">Mystery</option><option value="10749">Romance</option><option value="878">Science Fiction</option><option value="10770">TV Movie</option><option value="53">Thriller</option><option value="10752">War</option><option value="37">Western</option></select>
-            <div class="horizontal-scroll-wrapper">
-                <button class="scroll-left" onclick="scrollHorizontal('left', 'genre-movies')">←</button>
-                <div class="horizontal-scroll" id="genre-movies"><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg" alt="A Minecraft Movie">
-                    <h3>A Minecraft Movie</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/wbkPMTz2vVai7Ujyp0ag7AM9SrO.jpg" alt="Carjackers">
-                    <h3>Carjackers</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/4wKpglgZYMYpISMdThgdqS1TSQc.jpg" alt="Deva">
-                    <h3>Deva</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/mwzDApMZAGeYCEVjhegKvCzDX0W.jpg" alt="Cleaner">
-                    <h3>Cleaner</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg" alt="A Working Man">
-                    <h3>A Working Man</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg" alt="Captain America: Brave New World">
-                    <h3>Captain America: Brave New World</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/76qnVxU2rPdVvipBN3DPQH6fVYB.jpg" alt="Ask Me What You Want">
-                    <h3>Ask Me What You Want</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/mOR1Ks0EcXocwMV4EPv4letz0F5.jpg" alt="Peter Pan's Neverland Nightmare">
-                    <h3>Peter Pan's Neverland Nightmare</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/7NLY1jNwtZX1yVzwVoBeAhaBE8i.jpg" alt="The Quiet Ones">
-                    <h3>The Quiet Ones</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/edKpE9B5qN3e559OuMCLZdW1iBZ.jpg" alt="Mickey 17">
-                    <h3>Mickey 17</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/oXeiQAfRK90pxxhP5iKPXQqAIN1.jpg" alt="The Codes of War">
-                    <h3>The Codes of War</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/mClzWv7gBqgXfjZXp49Enyoex1v.jpg" alt="Cosmic Chaos">
-                    <h3>Cosmic Chaos</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/x4nWnfgJvL045rcUCSJzfgIIY9i.jpg" alt="Fight or Flight">
-                    <h3>Fight or Flight</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg" alt="Moana 2">
-                    <h3>Moana 2</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/lurEK87kukWNaHd0zYnsi3yzJrs.jpg" alt="Mufasa: The Lion King">
-                    <h3>Mufasa: The Lion King</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/hHPovtU4b96LHcoeEwRkGHI5btw.jpg" alt="Black Bag">
-                    <h3>Black Bag</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/kxxWBEn7qTN2xumSferCHbDudcT.jpg" alt="Ghost Game">
-                    <h3>Ghost Game</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/cYB3SHhITJSbRoisgn9QQTP8YkZ.jpg" alt="Cinderella's Revenge">
-                    <h3>Cinderella's Revenge</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/d8Ryb8AunYAuycVKDp5HpdWPKgC.jpg" alt="Sonic the Hedgehog 3">
-                    <h3>Sonic the Hedgehog 3</h3>
-                </div><div class="movie-card">
-                    <img src="https://image.tmdb.org/t/p/w500/nVwu3mN7hr1yF467pGct3yQFM41.jpg" alt="Popeye the Slayer Man">
-                    <h3>Popeye the Slayer Man</h3>
-                </div></div>
-                <button class="scroll-right" onclick="scrollHorizontal('right', 'genre-movies')">→</button>
-            </div>
-        </section>
+  const tweetInput = document.getElementById('tweetInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const feed = document.getElementById('feed');
 
-        <!-- Search Results Section (Initially Hidden) -->
-        <section id="search-results-section" style="display: none;">
-            <h2>Search Results</h2>
-            <div id="search-results">
-                <!-- Search results will be dynamically injected here -->
-            </div>
-        </section>
-    </main>
-    <!-- Header with Website Name and Professional Disclaimer -->
-    <footer class="footer">
-        <div class="website-name">REELZONE</div>
-        <div class="website-tagline">© ReelZone 2025. All content is provided through third-party sources; we do not host or store any media files.</div>
-    </footer>
-    <script src="script.js"></script>
+  sendBtn.onclick = () => {
+    const text = tweetInput.value.trim();
+    if (text) {
+      db.collection("tweets").add({
+        text,
+        time: Date.now()
+      });
+      tweetInput.value = "";
+    }
+  };
 
+  db.collection("tweets").orderBy("time", "desc").onSnapshot(snapshot => {
+    feed.innerHTML = "";
+    snapshot.forEach(doc => {
+      const tweet = doc.data();
+      const div = document.createElement('div');
+      div.className = "tweet";
+      div.innerHTML = `
+        <div>${tweet.text}</div>
+        <div class="time">${new Date(tweet.time).toLocaleString()}</div>
+      `;
+      feed.appendChild(div);
+    });
+  });
+</script>
 
-<script src="https://c.adsco.re/"></script><script referrerpolicy="unsafe-url" src="//cdn4ads.com/cqgnrhxrpq?UaAiqILn=BQFSAAAAAAAACZUAAtQHDxRxirENpZC7acpKIGT1M9_U8MxiSk7UxeVE90F3iHP4UksYmKhN6YfPHyNW370epTGfv6mHzDwbGb1mE-pPle7MSp08IEoxFjVBWtu_1O50JEjSl0GNoGZIoAdhpF4iPZcTWS7eTHLsuRAsVKK8Bx3aomfughr885U1dl8FEtzyvyhtVQXs3XKcsYsbAaRakEDjRNyKD1DN8n8XsV-0nm9l0F0fWiF0QiJ0mZcwa5oo_SmLcRi3f8g4LDrDdIYpaU06NAp1ZGi3aKvcdFo8WivG6rubwb4EdU6ro3CqM4BecsspkDAIWLYOpNkuDnyJ8bdhAspIsl0me2qcqW4X9DHV6Q181v7cd5RS3vp-_mrikFaj2paEOD0iD9yhxGaVl6Kh9r7fCt-Bs4d7fc6PeqVuAuxxjVH9R6slRr_uHlSNgbJc-6jF-M7gLRTeGg&amp;QcfaDBtr=4&amp;eVlqfLRO=5156326&amp;JLnwUCIB=&amp;nVMFjtvh=0,0&amp;cfLKoJXs=&amp;HfXbUCDu=&amp;s=810,1080,1,810,1080,0"></script><script referrerpolicy="unsafe-url" src="//cdn4ads.com/cqgnrhxrpq?UaAiqILn=BQFSAAAAAAAACZUAAsuGCUPzJptb62Aokq89O_Bep85u76o01_TLnAkd05fziP2VVxbJT3oWamVg3U3S6QYeNh4yQRjtiXOFOf5CfYEZwpqttYKQVXBeerpqvQJbdryzP2L7RpmW3GqcxbfKobCxd_WdSvGmDO_RLuDG1cKO-8ELihD2ss88T448qP-iUBGT7boFneVz16Ip0Pl8xYriv3Moi6WN3Eg6TmPDUfVuJ98Zg6y5KYyy_IejUqJwsvIp3LLggu7N3WhZ9aGw8x-IS5pyLBC9_YG1aQ0x7rMVV53ZDEohRvOnP8FhPP1dS79YcjHLAEp81HY5nkHdIfivjPz2XZ4nkT0xycZ5XUwXi3g8Gyl7_06OtFDn5CNliHkKLobxhvscqDUpiA881PDPd7Rc-MsHg07Jlgxugi0BnUaYcW6jIWzXZ0bTnHmnvofAjG36qvwawUo4DC5ESA&amp;QcfaDBtr=4&amp;eVlqfLRO=5156326&amp;JLnwUCIB=&amp;nVMFjtvh=0,0&amp;cfLKoJXs=&amp;HfXbUCDu=&amp;s=810,1080,1,810,1080,0"></script></body></html>
+</body>
+</html>
