@@ -156,16 +156,20 @@
     const sendMessage = () => {
       const messageInput = document.getElementById("messageInput");
       const message = messageInput.value.trim();
-      if (message === "") return;
+      console.log("Sending message: ", message);  // Debug log to check the message
 
+      if (message === "") return;  // Don't send empty messages
+
+      // Add message to Firestore
       messagesRef.add({
         sender: "Oliver", // Replace with dynamic user name if needed
         message: message,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
+        console.log("Message sent successfully!"); // Debug log
         messageInput.value = ""; // Clear input
       }).catch((error) => {
-        console.error("Error adding message:", error);
+        console.error("Error sending message:", error);
       });
     };
 
