@@ -126,6 +126,15 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging.js"></script>
 
   <script>
+    // Debugging function to log into console
+    const logToConsole = (message) => {
+      const debugConsole = document.getElementById("debugConsole");
+      debugConsole.innerHTML += message + "<br>";
+      debugConsole.scrollTop = debugConsole.scrollHeight;  // Scroll to the bottom
+    };
+
+    logToConsole("Starting the app...");
+
     // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
@@ -137,20 +146,19 @@
       measurementId: "G-81YMX6VBK4"
     };
 
+    logToConsole("Initializing Firebase...");
+
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore(app);
     const messaging = firebase.messaging(app);
 
+    logToConsole("Firebase Initialized!");
+
     // Real-time message sync from Firestore
     const messagesRef = db.collection("messages");
 
-    // Debugging function to log into console
-    const logToConsole = (message) => {
-      const debugConsole = document.getElementById("debugConsole");
-      debugConsole.innerHTML += message + "<br>";
-      debugConsole.scrollTop = debugConsole.scrollHeight;  // Scroll to the bottom
-    };
+    logToConsole("Connecting to Firestore...");
 
     const renderMessage = (message) => {
       const messageDiv = document.createElement("div");
@@ -160,11 +168,16 @@
         <div class="content">${message.message}</div>
       `;
       document.getElementById("messages").appendChild(messageDiv);
+      logToConsole("Rendering message: " + message.message);
     };
 
     const listenForMessages = () => {
+      logToConsole("Listening for real-time messages...");
+
       messagesRef.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+        logToConsole("Snapshot received from Firestore.");
         snapshot.docChanges().forEach((change) => {
+          logToConsole("Change type: " + change.type);
           if (change.type === "added") {
             renderMessage(change.doc.data());
             logToConsole("New message added: " + change.doc.data().message);
@@ -173,6 +186,8 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
           }
         });
+      }, (error) => {
+        logToConsole("Error listening to Firestore: " + error.message);
       });
     };
 
@@ -186,6 +201,8 @@
         logToConsole("Message is empty. Not sending.");
         return;  // Don't send empty messages
       }
+
+      logToConsole("Sending message to Firestore...");
 
       // Add message to Firestore
       messagesRef.add({
@@ -206,6 +223,7 @@
     // Enable FCM for notifications
     const requestPermission = async () => {
       try {
+        logToConsole("Requesting notification permission...");
         const token = await messaging.getToken({
           vapidKey: "YOUR_VAPID_KEY" // Replace with your own VAPID key
         });
@@ -228,15 +246,18 @@
 
     // Start listening for messages
     listenForMessages();
+
+    logToConsole("App setup complete. Ready for interaction.");
+
   </script>
 
   <script>
     // Service Worker Registration
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js").then((registration) => {
-        console.log("Service Worker registered:", registration);
+        logToConsole("Service Worker registered:", registration);
       }).catch((error) => {
-        console.log("Service Worker registration failed:", error);
+        logToConsole("Service Worker registration failed:", error);
       });
     }
   </script>
