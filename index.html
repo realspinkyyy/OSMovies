@@ -35,7 +35,7 @@
       transition: color 0.3s ease;
     }
     .messages {
-      max-height: 300px;
+      max-height: 200px;
       overflow-y: auto;
       margin-bottom: 20px;
       padding-right: 10px;
@@ -57,12 +57,12 @@
     }
     .input-container {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
       margin-top: 20px;
     }
     .input-container input {
-      width: 80%;
+      width: 100%;
       padding: 12px;
       border: 1px solid #ccc;
       border-radius: 50px;
@@ -70,7 +70,7 @@
       transition: all 0.3s ease;
     }
     .input-container button {
-      width: 15%;
+      width: 100%;
       padding: 12px;
       background-color: #007bff;
       color: white;
@@ -78,6 +78,7 @@
       border-radius: 50px;
       cursor: pointer;
       font-size: 1rem;
+      margin-top: 10px;
       transition: background-color 0.3s ease;
     }
     .input-container input:focus {
@@ -94,12 +95,12 @@
 <body>
   <div class="container">
     <h1>Urgent Messages</h1>
-    <div class="messages" id="messages">
-      <!-- Messages will appear here -->
-    </div>
     <div class="input-container">
       <input type="text" id="messageInput" placeholder="Type your urgent message..." />
       <button id="sendMessageBtn">Send</button>
+    </div>
+    <div class="messages" id="messages">
+      <!-- Messages will appear here -->
     </div>
   </div>
 
@@ -143,6 +144,9 @@
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
             renderMessage(change.doc.data());
+            // Scroll to the latest message
+            const messagesContainer = document.getElementById("messages");
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
           }
         });
       });
