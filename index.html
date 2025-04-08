@@ -132,14 +132,11 @@
 
   let isDarkMode = false;
 
-  // Check if username is saved in localStorage
-  let username = localStorage.getItem('username');
+  // Prompt for username every time
+  let username = prompt("What is your name?");
 
-  // Ask for the user's name if not already saved
-  if (!username) {
-    username = prompt('Please enter your name:');
-    localStorage.setItem('username', username);
-  }
+  // Store username in localStorage
+  localStorage.setItem('username', username);
 
   // Toggle Dark Mode
   darkModeBtn.onclick = () => {
