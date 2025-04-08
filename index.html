@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SpinkTweet</title>
+  <title>Spink Chat</title>
   <style>
     body {
       margin: 0;
@@ -97,9 +97,9 @@
 </head>
 <body>
 
-<header>SpinkTweet</header>
+<header>Spink Chat</header>
 <textarea id="tweetInput" rows="3" placeholder="What's happening?"></textarea>
-<button id="sendBtn">Tweet</button>
+<button id="sendBtn">Send</button>
 <div id="feed"></div>
 
 <button class="dark-mode">Dark Mode</button>
@@ -132,11 +132,8 @@
 
   let isDarkMode = false;
 
-  // Prompt for username every time
-  let username = prompt("What is your name?");
-
-  // Store username in localStorage
-  localStorage.setItem('username', username);
+  // Removed username prompt (no longer needed)
+  const username = "User";  // Placeholder for user
 
   // Toggle Dark Mode
   darkModeBtn.onclick = () => {
@@ -145,13 +142,13 @@
     darkModeBtn.classList.toggle('dark-mode-active', isDarkMode);
   };
 
-  // Handle Tweeting
+  // Handle sending a message
   sendBtn.onclick = () => {
     const text = tweetInput.value.trim();
     if (text) {
       db.collection("tweets").add({
         text,
-        username,  // Use the saved username
+        username,  // Placeholder username
         profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
         time: Date.now(),
         likes: 0
@@ -160,7 +157,7 @@
     }
   };
 
-  // Display Tweets
+  // Display messages
   db.collection("tweets").orderBy("time", "desc").onSnapshot(snapshot => {
     feed.innerHTML = "";
     snapshot.forEach(doc => {
@@ -182,7 +179,7 @@
     });
   });
 
-  // Like Tweet
+  // Like tweet function
   function likeTweet(id) {
     const tweetRef = db.collection("tweets").doc(id);
     tweetRef.update({
