@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>SpinkTweet</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SpinkTweet</title>
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
       background: #f0f2f5;
+      transition: background-color 0.3s;
     }
     header {
       background: #1da1f2;
@@ -42,10 +44,54 @@
       padding: 1rem;
       border-radius: 10px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: flex-start;
+    }
+    .tweet img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .tweet-content {
+      flex: 1;
     }
     .time {
       color: gray;
       font-size: 0.8em;
+    }
+    .tweet-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+    .likes, .replies {
+      cursor: pointer;
+      color: #1da1f2;
+    }
+    .dark-mode {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #1da1f2;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    /* Dark mode styles */
+    .dark-mode-active {
+      background: #333;
+      color: white;
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+    .tweet.dark-mode {
+      background: #333;
+      color: white;
     }
   </style>
 </head>
@@ -56,12 +102,13 @@
 <button id="sendBtn">Tweet</button>
 <div id="feed"></div>
 
+<button class="dark-mode">Dark Mode</button>
+
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
-  // Your Firebase config (from what you gave)
   const firebaseConfig = {
     apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
     authDomain: "spinktweet.firebaseapp.com",
@@ -72,25 +119,41 @@
     measurementId: "G-81YMX6VBK4"
   };
 
-  // Init Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
   const tweetInput = document.getElementById('tweetInput');
   const sendBtn = document.getElementById('sendBtn');
   const feed = document.getElementById('feed');
+  const darkModeBtn = document.querySelector('.dark-mode');
+  const body = document.body;
 
+  let isDarkMode = false;
+
+  // Toggle Dark Mode
+  darkModeBtn.onclick = () => {
+    isDarkMode = !isDarkMode;
+    body.classList.toggle('dark-mode', isDarkMode);
+    darkModeBtn.classList.toggle('dark-mode-active', isDarkMode);
+  };
+
+  // Handle Tweeting
   sendBtn.onclick = () => {
     const text = tweetInput.value.trim();
     if (text) {
       db.collection("tweets").add({
         text,
-        time: Date.now()
+        username: "User" + Math.floor(Math.random() * 1000),  // Generate random username
+        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
+        time: Date.now(),
+        likes: 0,
+        replies: 0
       });
       tweetInput.value = "";
     }
   };
 
+  // Display Tweets
   db.collection("tweets").orderBy("time", "desc").onSnapshot(snapshot => {
     feed.innerHTML = "";
     snapshot.forEach(doc => {
@@ -98,12 +161,36 @@
       const div = document.createElement('div');
       div.className = "tweet";
       div.innerHTML = `
-        <div>${tweet.text}</div>
-        <div class="time">${new Date(tweet.time).toLocaleString()}</div>
+        <img src="${tweet.profilePic}" alt="Profile">
+        <div class="tweet-content">
+          <div><strong>${tweet.username}</strong></div>
+          <div>${tweet.text}</div>
+          <div class="time">${new Date(tweet.time).toLocaleString()}</div>
+          <div class="tweet-footer">
+            <div class="likes" onclick="likeTweet('${doc.id}')">Likes: ${tweet.likes}</div>
+            <div class="replies" onclick="replyToTweet('${doc.id}')">Replies: ${tweet.replies}</div>
+          </div>
+        </div>
       `;
       feed.appendChild(div);
     });
   });
+
+  // Like Tweet
+  function likeTweet(id) {
+    const tweetRef = db.collection("tweets").doc(id);
+    tweetRef.update({
+      likes: firebase.firestore.FieldValue.increment(1)
+    });
+  }
+
+  // Reply to Tweet (basic increment for demo)
+  function replyToTweet(id) {
+    const tweetRef = db.collection("tweets").doc(id);
+    tweetRef.update({
+      replies: firebase.firestore.FieldValue.increment(1)
+    });
+  }
 </script>
 
 </body>
