@@ -1,281 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpinkTweet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        h1 {
-            text-align: center;
-            color: #1DA1F2;
-        }
-        input[type="text"], input[type="password"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            background-color: #1DA1F2;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0d8bcf;
-        }
-        .tweet {
-            padding: 15px;
-            margin: 10px 0;
-            background-color: #e1e8ed;
-            border-radius: 10px;
-        }
-        .tweet-actions button {
-            background-color: #1DA1F2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .tweet-actions button:hover {
-            background-color: #0d8bcf;
-        }
-        .profile {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpinkTweet - Real-time Communication</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    .messages {
+      background-color: white;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .message .sender {
+      font-weight: bold;
+    }
+    .message .content {
+      margin-top: 5px;
+    }
+    .input-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .input-container input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .input-container button {
+      width: 15%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .input-container button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-
-    <div id="appContainer" class="container">
-        <!-- Signup Form -->
-        <div id="signupForm">
-            <h1>Sign Up</h1>
-            <input type="text" id="signupEmail" placeholder="Email" required />
-            <input type="password" id="signupPassword" placeholder="Password" required />
-            <button onclick="signup()">Sign Up</button>
-            <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
-        </div>
-
-        <!-- Login Form -->
-        <div id="loginForm" style="display: none;">
-            <h1>Login</h1>
-            <input type="text" id="loginEmail" placeholder="Email" required />
-            <input type="password" id="loginPassword" placeholder="Password" required />
-            <button onclick="login()">Login</button>
-            <p>Don't have an account? <a href="#" onclick="showSignupForm()">Sign Up</a></p>
-        </div>
-
-        <!-- Profile Section -->
-        <div id="profileSection" style="display: none;">
-            <h2>Welcome, <span id="userName">Anonymous</span></h2>
-            <textarea id="tweetInput" placeholder="What's on your mind?" rows="3"></textarea>
-            <button onclick="postTweet()">Post Tweet</button>
-
-            <div id="tweetsList"></div>
-
-            <button onclick="logout()">Log Out</button>
-        </div>
+  <div class="container">
+    <h1>SpinkTweet Communication</h1>
+    <div class="messages" id="messages">
+      <!-- Messages will be dynamically inserted here -->
     </div>
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type your message..." />
+      <button id="sendMessageBtn">Send</button>
+    </div>
+  </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
+  <!-- Firebase SDK and App Configuration -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging.js"></script>
 
-    <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
-            authDomain: "spinktweet.firebaseapp.com",
-            projectId: "spinktweet",
-            storageBucket: "spinktweet.appspot.com",
-            messagingSenderId: "848866063079",
-            appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
-            measurementId: "G-81YMX6VBK4"
-        };
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
+      authDomain: "spinktweet.firebaseapp.com",
+      projectId: "spinktweet",
+      storageBucket: "spinktweet.firebasestorage.app",
+      messagingSenderId: "848866063079",
+      appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
+      measurementId: "G-81YMX6VBK4"
+    };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(app);
+    const messaging = firebase.messaging(app);
 
-        // Show the signup form
-        function showSignupForm() {
-            document.getElementById('signupForm').style.display = 'block';
-            document.getElementById('loginForm').style.display = 'none';
-        }
+    // Real-time message sync from Firestore
+    const messagesRef = db.collection("messages");
 
-        // Show the login form
-        function showLoginForm() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('signupForm').style.display = 'none';
-        }
+    const renderMessage = (message) => {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = "message";
+      messageDiv.innerHTML = `
+        <div class="sender">${message.sender}</div>
+        <div class="content">${message.message}</div>
+      `;
+      document.getElementById("messages").appendChild(messageDiv);
+    };
 
-        // Sign up the user
-        function signup() {
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(() => {
-                    showProfilePage();
-                })
-                .catch(error => {
-                    alert(error.message);
-                });
-        }
-
-        // Login the user
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    showProfilePage();
-                })
-                .catch(error => {
-                    alert(error.message);
-                });
-        }
-
-        // Show profile page after login/signup
-        function showProfilePage() {
-            const user = auth.currentUser;
-            if (user) {
-                document.getElementById('profileSection').style.display = 'block';
-                document.getElementById('signupForm').style.display = 'none';
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('userName').textContent = user.email.split('@')[0];
-                loadTweets();
-            } else {
-                // Show profile page for anonymous user
-                document.getElementById('profileSection').style.display = 'block';
-                document.getElementById('signupForm').style.display = 'none';
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('userName').textContent = "Anonymous";
-                loadTweets();
-            }
-        }
-
-        // Logout the user
-        function logout() {
-            auth.signOut().then(() => {
-                document.getElementById('profileSection').style.display = 'none';
-                showLoginForm();
-            }).catch(error => {
-                alert(error.message);
-            });
-        }
-
-        // Post a tweet
-        function postTweet() {
-            const tweetInput = document.getElementById('tweetInput').value;
-            if (tweetInput.trim()) {
-                const tweetData = {
-                    user: document.getElementById('userName').textContent,
-                    content: tweetInput,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0,
-                    replies: 0
-                };
-                db.collection('tweets').add(tweetData)
-                    .then(() => {
-                        document.getElementById('tweetInput').value = ''; // Clear input
-                        loadTweets(); // Reload tweets
-                    })
-                    .catch(error => {
-                        alert("Error posting tweet: ", error);
-                    });
-            }
-        }
-
-        // Load tweets from Firestore
-        function loadTweets() {
-            db.collection('tweets').orderBy('timestamp', 'desc').get()
-                .then(snapshot => {
-                    const tweetsList = document.getElementById('tweetsList');
-                    tweetsList.innerHTML = ''; // Clear existing tweets
-                    snapshot.forEach(doc => {
-                        const tweet = doc.data();
-                        const tweetElement = document.createElement('div');
-                        tweetElement.classList.add('tweet');
-                        tweetElement.innerHTML = `
-                            <div class="user">${tweet.user}</div>
-                            <div class="content">${tweet.content}</div>
-                            <div class="tweet-actions">
-                                <button onclick="likeTweet('${doc.id}')">Like (${tweet.likes})</button>
-                                <button onclick="replyToTweet('${doc.id}')">Reply</button>
-                            </div>
-                        `;
-                        tweetsList.appendChild(tweetElement);
-                    });
-                })
-                .catch(error => {
-                    alert("Error loading tweets: ", error);
-                });
-        }
-
-        // Like a tweet
-        function likeTweet(tweetId) {
-            const tweetRef = db.collection('tweets').doc(tweetId);
-            tweetRef.update({
-                likes: firebase.firestore.FieldValue.increment(1)
-            }).then(() => {
-                loadTweets(); // Reload tweets after liking
-            }).catch(error => {
-                alert("Error liking tweet: ", error);
-            });
-        }
-
-        // Reply to a tweet
-        function replyToTweet(tweetId) {
-            const tweetContent = prompt("Enter your reply:");
-            if (tweetContent) {
-                const tweetRef = db.collection('tweets').doc(tweetId);
-                tweetRef.update({
-                    replies: firebase.firestore.FieldValue.increment(1)
-                }).then(() => {
-                    loadTweets(); // Reload tweets after replying
-                }).catch(error => {
-                    alert("Error replying to tweet: ", error);
-                });
-            }
-        }
-
-        // Automatically show profile page if logged in
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                showProfilePage();
-            } else {
-                showLoginForm();
-            }
+    const listenForMessages = () => {
+      messagesRef.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            renderMessage(change.doc.data());
+          }
         });
+      });
+    };
 
-    </script>
+    // Send message to Firestore
+    const sendMessage = () => {
+      const messageInput = document.getElementById("messageInput");
+      const message = messageInput.value;
+      if (message.trim() === "") return;
+
+      messagesRef.add({
+        sender: "Oliver", // Replace with dynamic user name if needed
+        message: message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        messageInput.value = ""; // Clear input
+      }).catch((error) => {
+        console.error("Error adding message:", error);
+      });
+    };
+
+    // Set up message sending
+    document.getElementById("sendMessageBtn").addEventListener("click", sendMessage);
+
+    // Enable FCM for notifications
+    const requestPermission = async () => {
+      try {
+        const token = await messaging.getToken({
+          vapidKey: "YOUR_VAPID_KEY" // Replace with your own VAPID key
+        });
+        console.log("FCM Token:", token);
+        // You can store this token in Firestore to target specific users
+      } catch (error) {
+        console.error("Error getting FCM token:", error);
+      }
+    };
+
+    messaging.onMessage((payload) => {
+      console.log("Message received:", payload);
+      // Show the notification when app is in the foreground
+      new Notification("New Message", {
+        body: payload.notification.body,
+      });
+    });
+
+    // Request permission for notifications
+    requestPermission();
+
+    // Start listening for messages
+    listenForMessages();
+  </script>
+
+  <script>
+    // Service Worker Registration
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js").then((registration) => {
+        console.log("Service Worker registered:", registration);
+      }).catch((error) => {
+        console.log("Service Worker registration failed:", error);
+      });
+    }
+  </script>
 </body>
 </html>
