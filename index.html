@@ -5,23 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpinkTweet</title>
     <style>
-        /* Basic styles for the app */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-        }
-
-        .app-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
         }
-
-        .tweet-container {
+        .container {
             width: 100%;
             max-width: 500px;
             padding: 20px;
@@ -29,28 +24,36 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
-
+        h1 {
+            text-align: center;
+            color: #1DA1F2;
+        }
+        input[type="text"], input[type="password"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #1DA1F2;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0d8bcf;
+        }
         .tweet {
             padding: 15px;
             margin: 10px 0;
             background-color: #e1e8ed;
             border-radius: 10px;
         }
-
-        .tweet .user {
-            font-weight: bold;
-        }
-
-        .tweet .content {
-            margin-top: 10px;
-        }
-
-        .tweet-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
         .tweet-actions button {
             background-color: #1DA1F2;
             color: white;
@@ -59,42 +62,44 @@
             padding: 5px 10px;
             cursor: pointer;
         }
-
         .tweet-actions button:hover {
             background-color: #0d8bcf;
         }
-
         .profile {
             margin-top: 20px;
-        }
-
-        .profile button {
-            background-color: #ff6b6b;
-        }
-
-        .profile button:hover {
-            background-color: #d9534f;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Profile Section -->
-        <div class="profile" id="profileSection" style="display: none;">
-            <h3>Welcome, <span id="userName"></span></h3>
-            <button onclick="logout()">Log Out</button>
+
+    <div id="appContainer" class="container">
+        <!-- Signup Form -->
+        <div id="signupForm">
+            <h1>Sign Up</h1>
+            <input type="text" id="signupEmail" placeholder="Email" required />
+            <input type="password" id="signupPassword" placeholder="Password" required />
+            <button onclick="signup()">Sign Up</button>
+            <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
         </div>
 
-        <!-- Tweets Section -->
-        <div id="tweetSection" class="tweet-container">
-            <h2>SpinkTweet</h2>
-            <div id="tweetsList">
-                <!-- Tweets will appear here -->
-            </div>
+        <!-- Login Form -->
+        <div id="loginForm" style="display: none;">
+            <h1>Login</h1>
+            <input type="text" id="loginEmail" placeholder="Email" required />
+            <input type="password" id="loginPassword" placeholder="Password" required />
+            <button onclick="login()">Login</button>
+            <p>Don't have an account? <a href="#" onclick="showSignupForm()">Sign Up</a></p>
+        </div>
 
-            <!-- Tweet Input Section -->
-            <textarea id="tweetInput" placeholder="What's on your mind?" rows="3" style="width: 100%;"></textarea>
+        <!-- Profile Section -->
+        <div id="profileSection" style="display: none;">
+            <h2>Welcome, <span id="userName"></span></h2>
+            <textarea id="tweetInput" placeholder="What's on your mind?" rows="3"></textarea>
             <button onclick="postTweet()">Post Tweet</button>
+
+            <div id="tweetsList"></div>
+
+            <button onclick="logout()">Log Out</button>
         </div>
     </div>
 
@@ -120,35 +125,85 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Check if user is logged in
-        auth.onAuthStateChanged(user => {
+        // Show the signup form
+        function showSignupForm() {
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+        }
+
+        // Show the login form
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+        }
+
+        // Sign up the user
+        function signup() {
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    showProfilePage();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        // Login the user
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    showProfilePage();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        // Show profile page after login/signup
+        function showProfilePage() {
+            const user = auth.currentUser;
             if (user) {
                 document.getElementById('profileSection').style.display = 'block';
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('userName').textContent = user.email.split('@')[0];
                 loadTweets();
-            } else {
-                window.location.href = 'login.html'; // Redirect to login if not authenticated
             }
-        });
+        }
+
+        // Logout the user
+        function logout() {
+            auth.signOut().then(() => {
+                document.getElementById('profileSection').style.display = 'none';
+                showLoginForm();
+            }).catch(error => {
+                alert(error.message);
+            });
+        }
 
         // Post a tweet
         function postTweet() {
-            const tweetInput = document.getElementById('tweetInput');
-            if (tweetInput.value.trim()) {
+            const tweetInput = document.getElementById('tweetInput').value;
+            if (tweetInput.trim()) {
                 const tweetData = {
                     user: auth.currentUser.email.split('@')[0],
-                    content: tweetInput.value.trim(),
+                    content: tweetInput,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     likes: 0,
                     replies: 0
                 };
-
                 db.collection('tweets').add(tweetData)
                     .then(() => {
-                        tweetInput.value = ''; // Clear input field
+                        document.getElementById('tweetInput').value = ''; // Clear input
                         loadTweets(); // Reload tweets
                     })
-                    .catch(error => console.error("Error posting tweet: ", error));
+                    .catch(error => {
+                        alert("Error posting tweet: ", error);
+                    });
             }
         }
 
@@ -173,7 +228,9 @@
                         tweetsList.appendChild(tweetElement);
                     });
                 })
-                .catch(error => console.error("Error loading tweets: ", error));
+                .catch(error => {
+                    alert("Error loading tweets: ", error);
+                });
         }
 
         // Like a tweet
@@ -182,21 +239,25 @@
             tweetRef.update({
                 likes: firebase.firestore.FieldValue.increment(1)
             }).then(() => {
-                loadTweets(); // Reload tweets to reflect changes
-            }).catch(error => console.error("Error liking tweet: ", error));
+                loadTweets(); // Reload tweets after liking
+            }).catch(error => {
+                alert("Error liking tweet: ", error);
+            });
         }
 
-        // Handle replies (just a placeholder for now)
+        // Reply to a tweet (placeholder function)
         function replyToTweet(tweetId) {
             alert("Replying to tweet...");
         }
 
-        // Logout the user
-        function logout() {
-            auth.signOut().then(() => {
-                window.location.href = 'login.html'; // Redirect to login after logout
-            }).catch(error => console.error("Error signing out: ", error));
-        }
+        // Initial setup
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                showProfilePage();
+            } else {
+                showLoginForm();
+            }
+        });
     </script>
 </body>
 </html>
