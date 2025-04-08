@@ -1,7 +1,7 @@
 {
-  "short_name": "SpinkTweet",
-  "name": "SpinkTweet Communication App",
-  "description": "Real-time communication with your family and friends",
+  "name": "Urgent Messages",
+  "short_name": "Urgent",
+  "description": "A real-time communication app to send urgent messages",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
