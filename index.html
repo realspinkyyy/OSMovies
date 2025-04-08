@@ -1,197 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SpinkTweet</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #f0f2f5;
-      transition: background-color 0.3s;
-    }
-    header {
-      background: #1da1f2;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5em;
-    }
-    #tweetInput {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      box-sizing: border-box;
-      border: none;
-      outline: none;
-    }
-    #sendBtn {
-      width: 100%;
-      padding: 1rem;
-      background: #1da1f2;
-      color: white;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    #feed {
-      padding: 1rem;
-    }
-    .tweet {
-      background: white;
-      margin-bottom: 1rem;
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: flex-start;
-    }
-    .tweet img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .tweet-content {
-      flex: 1;
-    }
-    .time {
-      color: gray;
-      font-size: 0.8em;
-    }
-    .tweet-footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-    .likes, .replies {
-      cursor: pointer;
-      color: #1da1f2;
-    }
-    .dark-mode {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: #1da1f2;
-      color: white;
-      padding: 0.5rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    /* Dark mode styles */
-    .dark-mode-active {
-      background: #333;
-      color: white;
-    }
-    body.dark-mode {
-      background-color: #121212;
-      color: white;
-    }
-    .tweet.dark-mode {
-      background: #333;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpinkTweet</title>
+
+    <!-- CSS styles -->
+    <style>
+        /* Basic Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        /* Body */
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          color: #333;
+        }
+
+        /* Header */
+        header {
+          background-color: #1DA1F2;
+          color: white;
+          padding: 20px;
+          text-align: center;
+        }
+
+        header h1 {
+          font-size: 2em;
+        }
+
+        nav a {
+          color: white;
+          margin: 0 15px;
+          text-decoration: none;
+        }
+
+        nav a:hover {
+          text-decoration: underline;
+        }
+
+        /* Tweet Container */
+        #tweetsContainer {
+          padding: 20px;
+        }
+
+        .tweet {
+          background-color: white;
+          border-radius: 10px;
+          margin-bottom: 20px;
+          padding: 15px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tweet-header {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+
+        .profile-pic {
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          margin-right: 10px;
+        }
+
+        .username {
+          font-weight: bold;
+        }
+
+        .tweet-content p {
+          margin-bottom: 10px;
+        }
+
+        .tweet-footer {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .tweet-footer div {
+          cursor: pointer;
+          color: #1DA1F2;
+        }
+
+        /* Profile, Login, Signup Pages */
+        #signupPage, #loginPage, #profilePage {
+          display: none;
+          padding: 20px;
+          max-width: 400px;
+          margin: 0 auto;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #signupForm input, #loginForm input, #profileForm input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+
+        #signupForm button, #loginForm button, #profileForm button {
+          padding: 10px;
+          background-color: #1DA1F2;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        #signupForm button:hover, #loginForm button:hover, #profileForm button:hover {
+          background-color: #0d8bcf;
+        }
+    </style>
 </head>
 <body>
 
-<header>SpinkTweet</header>
-<textarea id="tweetInput" rows="3" placeholder="What's happening?"></textarea>
-<button id="sendBtn">Tweet</button>
-<div id="feed"></div>
+    <header>
+        <h1>SpinkTweet</h1>
+        <nav>
+            <a href="javascript:void(0);" onclick="showHomePage()">Home</a>
+            <a href="javascript:void(0);" onclick="showProfilePage()">Profile</a>
+            <a href="javascript:void(0);" onclick="showLoginPage()">Login</a>
+        </nav>
+    </header>
 
-<button class="dark-mode">Dark Mode</button>
+    <!-- Tweets Section -->
+    <div id="tweetsContainer"></div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <!-- Signup Page (signup.html) -->
+    <div id="signupPage">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <input type="text" id="signupUsername" placeholder="Username" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
-    authDomain: "spinktweet.firebaseapp.com",
-    projectId: "spinktweet",
-    storageBucket: "spinktweet.firebasestorage.app",
-    messagingSenderId: "848866063079",
-    appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
-    measurementId: "G-81YMX6VBK4"
-  };
+    <!-- Login Page (login.html) -->
+    <div id="loginPage">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+    <!-- Profile Page (profile.html) -->
+    <div id="profilePage">
+        <h2>Profile</h2>
+        <form id="profileForm">
+            <input type="text" id="profileUsername" placeholder="Username" required>
+            <input type="file" id="profilePic" accept="image/*">
+            <button type="submit">Save</button>
+        </form>
+    </div>
 
-  const tweetInput = document.getElementById('tweetInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const feed = document.getElementById('feed');
-  const darkModeBtn = document.querySelector('.dark-mode');
-  const body = document.body;
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js"></script>
 
-  let isDarkMode = false;
+    <!-- JavaScript -->
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
+            authDomain: "spinktweet.firebaseapp.com",
+            projectId: "spinktweet",
+            storageBucket: "spinktweet.appspot.com",
+            messagingSenderId: "848866063079",
+            appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
+            measurementId: "G-81YMX6VBK4"
+        };
 
-  // Toggle Dark Mode
-  darkModeBtn.onclick = () => {
-    isDarkMode = !isDarkMode;
-    body.classList.toggle('dark-mode', isDarkMode);
-    darkModeBtn.classList.toggle('dark-mode-active', isDarkMode);
-  };
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-  // Handle Tweeting
-  sendBtn.onclick = () => {
-    const text = tweetInput.value.trim();
-    if (text) {
-      db.collection("tweets").add({
-        text,
-        username: "User" + Math.floor(Math.random() * 1000),  // Generate random username
-        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
-        time: Date.now(),
-        likes: 0,
-        replies: 0
-      });
-      tweetInput.value = "";
-    }
-  };
+        document.addEventListener("DOMContentLoaded", function() {
+            // Render Tweets on Home Page
+            renderTweets();
 
-  // Display Tweets
-  db.collection("tweets").orderBy("time", "desc").onSnapshot(snapshot => {
-    feed.innerHTML = "";
-    snapshot.forEach(doc => {
-      const tweet = doc.data();
-      const div = document.createElement('div');
-      div.className = "tweet";
-      div.innerHTML = `
-        <img src="${tweet.profilePic}" alt="Profile">
-        <div class="tweet-content">
-          <div><strong>${tweet.username}</strong></div>
-          <div>${tweet.text}</div>
-          <div class="time">${new Date(tweet.time).toLocaleString()}</div>
-          <div class="tweet-footer">
-            <div class="likes" onclick="likeTweet('${doc.id}')">Likes: ${tweet.likes}</div>
-            <div class="replies" onclick="replyToTweet('${doc.id}')">Replies: ${tweet.replies}</div>
-          </div>
-        </div>
-      `;
-      feed.appendChild(div);
-    });
-  });
+            // Handle Signup Form Submission
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
 
-  // Like Tweet
-  function likeTweet(id) {
-    const tweetRef = db.collection("tweets").doc(id);
-    tweetRef.update({
-      likes: firebase.firestore.FieldValue.increment(1)
-    });
-  }
+            // Handle Login Form Submission
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
 
-  // Reply to Tweet (basic increment for demo)
-  function replyToTweet(id) {
-    const tweetRef = db.collection("tweets").doc(id);
-    tweetRef.update({
-      replies: firebase.firestore.FieldValue.increment(1)
-    });
-  }
-</script>
+            // Handle Profile Form Submission
+            document.getElementById('profileForm').addEventListener('submit', handleProfileUpdate);
+        });
 
+        // Render Tweets from Firebase
+        function renderTweets() {
+            db.collection("tweets").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const tweet = doc.data();
+                    const tweetHTML = `
+                        <div class="tweet" id="tweet-${doc.id}">
+                            <div class="tweet-header">
+                                <img src="${tweet.profilePic}" alt="${tweet.username}" class="profile-pic">
+                                <span class="username">${tweet.username}</span>
+                            </div>
+                            <div class="tweet-content">
+                                <p>${tweet.content}</p>
+                            </div>
+                            <div class="tweet-footer">
+                                <div class="likes" onclick="likeTweet('${doc.id}')">Likes: ${tweet.likes || 0}</div>
+                                <div class="replies" onclick="replyToTweet('${doc.id}')">Replies: ${tweet.replies || 0}</div>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById("tweetsContainer").innerHTML += tweetHTML;
+                });
+            });
+        }
+
+        // Like Tweet
+        function likeTweet(tweetId) {
+            const tweetRef = db.collection("tweets").doc(tweetId);
+            tweetRef.update({
+                likes: firebase.firestore.FieldValue.increment(1)
+            });
+        }
+
+        // Reply to Tweet
+        function replyToTweet(tweetId) {
+            // Handle replies here
+            alert(`Reply to tweet: ${tweetId}`);
+        }
+
+        // Show Home Page
+        function showHomePage() {
+            document.getElementById("signupPage").style.display = 'none';
+            document.getElementById("loginPage").style.display = 'none';
+            document.getElementById("profilePage").style.display = 'none';
+            document.getElementById("tweetsContainer").style.display = 'block';
+        }
+
+        // Show Signup Page
+        function showSignupPage() {
+            document.getElementById("signupPage").style.display = 'block';
+            document.getElementById("loginPage").style.display = 'none';
+            document.getElementById("profilePage").style.display = 'none';
+            document.getElementById("tweetsContainer").style.display = 'none';
+        }
+
+        // Show Login Page
+        function showLoginPage() {
+            document.getElementById("signupPage").style.display = 'none';
+            document.getElementById("loginPage").style.display = 'block';
+            document.getElementById("profilePage").style.display = 'none';
+            document.getElementById("tweetsContainer").style.display = 'none';
+        }
+
+        // Show Profile Page
+        function showProfilePage() {
+            document.getElementById("signupPage").style.display = 'none';
+            document.getElementById("loginPage").style.display = 'none';
+            document.getElementById("profilePage").style.display = 'block';
+            document.getElementById("tweetsContainer").style.display = 'none';
+        }
+
+        // Handle Sign Up
+        function handleSignup(event) {
+            event.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            auth.createUserWithEmailAndPassword(username + "@example.com", password)
+                .then((userCredential) => {
+                    alert("Sign up successful!");
+                    showHomePage();
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        }
+
+        // Handle Login
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            auth.signInWithEmailAndPassword(username + "@example.com", password)
+                .then((userCredential) => {
+                    alert("Login successful!");
+                    showHomePage();
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        }
+
+        // Handle Profile Update
+        function handleProfileUpdate(event) {
+            event.preventDefault();
+            const username = document.getElementById('profileUsername').value;
+            const profilePic = document.getElementById('profilePic').files[0];
+            // You can upload the profilePic to Firebase Storage here
+            alert("Profile updated!");
+        }
+    </script>
 </body>
 </html>
