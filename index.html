@@ -119,6 +119,7 @@
     measurementId: "G-81YMX6VBK4"
   };
 
+  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
@@ -157,8 +158,13 @@
         time: Date.now(),
         likes: 0,
         replies: 0
+      })
+      .then(() => {
+        tweetInput.value = "";
+      })
+      .catch((error) => {
+        console.error("Error adding tweet: ", error);
       });
-      tweetInput.value = "";
     }
   };
 
@@ -190,6 +196,9 @@
     const tweetRef = db.collection("tweets").doc(id);
     tweetRef.update({
       likes: firebase.firestore.FieldValue.increment(1)
+    })
+    .catch((error) => {
+      console.error("Error liking tweet: ", error);
     });
   }
 
@@ -198,6 +207,9 @@
     const tweetRef = db.collection("tweets").doc(id);
     tweetRef.update({
       replies: firebase.firestore.FieldValue.increment(1)
+    })
+    .catch((error) => {
+      console.error("Error replying to tweet: ", error);
     });
   }
 </script>
