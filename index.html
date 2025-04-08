@@ -129,11 +129,11 @@
   const body = document.body;
 
   let isDarkMode = false;
-
-  // Check if username is saved in localStorage
   let username = localStorage.getItem('username');
+
+  // Ask for the user's name if not already saved
   if (!username) {
-    username = prompt('Please enter your name:');
+    username = prompt("What is your name?");
     localStorage.setItem('username', username);
   }
 
@@ -150,7 +150,7 @@
     if (text) {
       db.collection("tweets").add({
         text,
-        username,
+        username,  // Use the saved username
         profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
         time: Date.now(),
         likes: 0
