@@ -106,7 +106,13 @@
       justify-content: center;
       align-items: center;
       z-index: 10;
-      visibility: hidden;
+      visibility: hidden; /* Hidden by default */
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    #popup.show {
+      visibility: visible;
+      opacity: 1; /* Fade in when visible */
     }
     #popupContent {
       background: white;
@@ -195,7 +201,9 @@
 
   // Show popup when the page loads
   window.onload = () => {
-    popup.style.visibility = 'visible';
+    setTimeout(() => {
+      popup.classList.add('show');  // Make the popup visible with a smooth fade-in
+    }, 200);  // Slight delay for better user experience
   };
 
   // Save user info
@@ -212,11 +220,11 @@
       photoRef.put(file).then(() => {
         photoRef.getDownloadURL().then(url => {
           profilePic = url;
-          popup.style.visibility = 'hidden';
+          popup.classList.remove('show');  // Hide the popup after saving info
         });
       });
     } else {
-      popup.style.visibility = 'hidden';
+      popup.classList.remove('show');  // Hide the popup without uploading a photo
     }
   }
 
