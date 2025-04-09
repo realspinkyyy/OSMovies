@@ -1,9 +1,12 @@
+This is some code I’ve made! If I ask you to do any future updates remember it’s for this code
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Spink Chat</title>
+  <title>SpinkTweet</title>
   <style>
     body {
       margin: 0;
@@ -66,7 +69,7 @@
       margin-top: 10px;
       font-size: 0.9em;
     }
-    .likes {
+    .likes, .replies {
       cursor: pointer;
       color: #1da1f2;
     }
@@ -97,30 +100,28 @@
 </head>
 <body>
 
-<header>Spink Chat</header>
+<header>SpinkTweet</header>
 <textarea id="tweetInput" rows="3" placeholder="What's happening?"></textarea>
-<button id="sendBtn">Send</button>
+<button id="sendBtn">Tweet</button>
 <div id="feed"></div>
 
 <button class="dark-mode">Dark Mode</button>
 
 <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script>
-  // Firebase initialization
   const firebaseConfig = {
     apiKey: "AIzaSyDWDk_p33Y_jgPNJPHoJApEmo0W7Q9BhxA",
     authDomain: "spinktweet.firebaseapp.com",
     projectId: "spinktweet",
-    storageBucket: "spinktweet.firebaseapp.com",
+    storageBucket: "spinktweet.firebasestorage.app",
     messagingSenderId: "848866063079",
     appId: "1:848866063079:web:be2efce9b4c5ecc3956842",
     measurementId: "G-81YMX6VBK4"
   };
 
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
@@ -132,9 +133,6 @@
 
   let isDarkMode = false;
 
-  // Removed username prompt (no longer needed)
-  const username = "User";  // Placeholder for user
-
   // Toggle Dark Mode
   darkModeBtn.onclick = () => {
     isDarkMode = !isDarkMode;
@@ -142,22 +140,23 @@
     darkModeBtn.classList.toggle('dark-mode-active', isDarkMode);
   };
 
-  // Handle sending a message
+  // Handle Tweeting
   sendBtn.onclick = () => {
     const text = tweetInput.value.trim();
     if (text) {
       db.collection("tweets").add({
         text,
-        username,  // Placeholder username
+        username: "User" + Math.floor(Math.random() * 1000),  // Generate random username
         profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
         time: Date.now(),
-        likes: 0
+        likes: 0,
+        replies: 0
       });
       tweetInput.value = "";
     }
   };
 
-  // Display messages
+  // Display Tweets
   db.collection("tweets").orderBy("time", "desc").onSnapshot(snapshot => {
     feed.innerHTML = "";
     snapshot.forEach(doc => {
@@ -172,6 +171,7 @@
           <div class="time">${new Date(tweet.time).toLocaleString()}</div>
           <div class="tweet-footer">
             <div class="likes" onclick="likeTweet('${doc.id}')">Likes: ${tweet.likes}</div>
+            <div class="replies" onclick="replyToTweet('${doc.id}')">Replies: ${tweet.replies}</div>
           </div>
         </div>
       `;
@@ -179,11 +179,19 @@
     });
   });
 
-  // Like tweet function
+  // Like Tweet
   function likeTweet(id) {
     const tweetRef = db.collection("tweets").doc(id);
     tweetRef.update({
       likes: firebase.firestore.FieldValue.increment(1)
+    });
+  }
+
+  // Reply to Tweet (basic increment for demo)
+  function replyToTweet(id) {
+    const tweetRef = db.collection("tweets").doc(id);
+    tweetRef.update({
+      replies: firebase.firestore.FieldValue.increment(1)
     });
   }
 </script>
