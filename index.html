@@ -93,6 +93,45 @@
       background: #333;
       color: white;
     }
+    
+    /* Popup styles */
+    #popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      visibility: hidden;
+    }
+    #popupContent {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    #popup input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #popup button {
+      padding: 10px 20px;
+      background: #1da1f2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -103,6 +142,17 @@
 <div id="feed"></div>
 
 <button class="dark-mode">Dark Mode</button>
+
+<!-- Popup for user information -->
+<div id="popup">
+  <div id="popupContent">
+    <h2>Welcome! Please enter your details:</h2>
+    <input type="text" id="firstName" placeholder="First Name (Optional)">
+    <input type="text" id="lastName" placeholder="Last Name (Optional)">
+    <input type="file" id="photoInput" accept="image/*" placeholder="Upload a photo (Optional)">
+    <button onclick="saveUserInfo()">Save</button>
+  </div>
+</div>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -127,8 +177,14 @@
   const feed = document.getElementById('feed');
   const darkModeBtn = document.querySelector('.dark-mode');
   const body = document.body;
+  const popup = document.getElementById('popup');
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const photoInput = document.getElementById('photoInput');
 
   let isDarkMode = false;
+  let username = "User" + Math.floor(Math.random() * 1000);  // Default username
+  let profilePic = "https://randomuser.me/api/portraits/men/1.jpg";  // Default profile picture
 
   // Toggle Dark Mode
   darkModeBtn.onclick = () => {
@@ -137,14 +193,41 @@
     darkModeBtn.classList.toggle('dark-mode-active', isDarkMode);
   };
 
+  // Show popup when the page loads
+  window.onload = () => {
+    popup.style.visibility = 'visible';
+  };
+
+  // Save user info
+  function saveUserInfo() {
+    const firstName = firstNameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+
+    username = firstName + (lastName ? " " + lastName : "") || username;
+
+    if (photoInput.files.length > 0) {
+      const file = photoInput.files[0];
+      const storageRef = firebase.storage().ref();
+      const photoRef = storageRef.child('profile_pics/' + file.name);
+      photoRef.put(file).then(() => {
+        photoRef.getDownloadURL().then(url => {
+          profilePic = url;
+          popup.style.visibility = 'hidden';
+        });
+      });
+    } else {
+      popup.style.visibility = 'hidden';
+    }
+  }
+
   // Handle Tweeting
   sendBtn.onclick = () => {
     const text = tweetInput.value.trim();
     if (text) {
       db.collection("tweets").add({
         text,
-        username: "User" + Math.floor(Math.random() * 1000),  // Generate random username
-        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",  // Placeholder profile pic
+        username,  // Use the user’s name
+        profilePic,  // Use the user’s profile picture
         time: Date.now(),
         likes: 0,
         replies: 0
